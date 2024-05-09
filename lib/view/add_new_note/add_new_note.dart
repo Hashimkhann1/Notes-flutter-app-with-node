@@ -7,35 +7,63 @@ import 'package:notes_app_with_node/view_model/bloc/notes_bloc/note_bloc.dart';
 import 'package:notes_app_with_node/view_model/bloc/notes_bloc/notes_event.dart';
 import 'package:uuid/uuid.dart';
 
-class AddNewNote extends StatelessWidget {
-  AddNewNote({super.key});
+class AddNewNote extends StatefulWidget {
 
+  final bool isUpdate;
+  final NoteModel? noteModel;
+  AddNewNote({super.key,required this.isUpdate,this.noteModel});
+
+  @override
+  State<AddNewNote> createState() => _AddNewNoteState();
+}
+
+class _AddNewNoteState extends State<AddNewNote> {
   FocusNode noteFocus = FocusNode();
 
   final titleController = TextEditingController();
   final noteController = TextEditingController();
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if(widget.isUpdate){
+      titleController.text = widget.noteModel!.title.toString();
+      noteController.text = widget.noteModel!.content.toString();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: MyText(title: 'Add Note'),
+        title: MyText(title: widget.isUpdate ? "Update Note" : 'Add Note',color: Colors.white,fontWeight: FontWeight.bold,),
+        iconTheme: IconThemeData(
+          color: Colors.white
+        ),
         actions: [
           IconButton(
               onPressed: () {
-
-                context.read<NotesBloc>().add(AddNote(NoteModel(
+                
+                if(widget.isUpdate){
+                  widget.noteModel!.title = titleController.text.toString();
+                  widget.noteModel!.content = noteController.text.toString();
+                  widget.noteModel?.date = DateTime.now().toString();
+                  context.read<NotesBloc>().add(UpdateNote(widget.noteModel!));
+                }else{
+                  context.read<NotesBloc>().add(AddNote(NoteModel(
                     id: Uuid().v1(),
                     userId: 'hashim@gmail.com',
                     title: titleController.text.toString(),
                     content: noteController.text.toString(),
                     date: DateTime.now().toString(),
-                )));
-
+                  )));
+                }
                 Navigator.pop(context);
+
               },
-              icon: const Icon(Icons.check))
+              icon: const Icon(Icons.check,color: Colors.white,))
         ],
       ),
       body: Padding(
@@ -44,7 +72,7 @@ class AddNewNote extends StatelessWidget {
           children: [
             TextField(
               controller: titleController,
-              autofocus: true,
+              autofocus: widget.isUpdate ? false : true,
               style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w600),
               onSubmitted: (val) {
                 if (val != '') {
