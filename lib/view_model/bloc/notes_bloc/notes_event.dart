@@ -11,20 +11,25 @@ abstract class NotesEvent extends Equatable {
   List<Object> get props => [];
 
 }
+/// ftech Notes
+class FetchNotes extends NotesEvent {}
 
 /// add note event
 class AddNote extends NotesEvent {
 
   final NoteModel noteModel;
-  AddNote(this.noteModel);
+  const AddNote(this.noteModel);
 
 }
 
 /// update note event
-class UpdateNote extends NotesEvent {}
+class UpdateNote extends NotesEvent {
+  final NoteModel noteModel;
+  const UpdateNote(this.noteModel);
+}
 
 /// delete note event
 class DeleteNote extends NotesEvent {
   final String noteId;
-  DeleteNote(this.noteId);
+  const DeleteNote(this.noteId);
 }
