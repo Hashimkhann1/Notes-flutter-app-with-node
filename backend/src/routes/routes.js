@@ -4,12 +4,14 @@ const Note = require('../models/note');
 const router = express.Router();
 
 
-router.post('/list/' , async function(req , res) {
-    var notes = await Note.find({userId: req.body.userId});
+router.get('/list/:userId' , async function(req , res) {
+    var notes = await Note.find({userId: req.params.userId});
     res.json(notes);
 });
 
 router.post('/add' , async function(req , res) {
+
+    await Note.deleteOne({ id: req.body.id });
 
     const newNote = Note({
         id: req.body.id,
@@ -24,13 +26,13 @@ router.post('/add' , async function(req , res) {
 });
 
 /// deleting note
-router.post('/delete', async function(req , res) {
-    const idToDelete = req.body.id;
+router.delete('/delete/:postId', async function(req , res) {
 
-    await Note.deleteOne({ id: idToDelete });
-
-    const response = { message: "Note deleted with id: " + idToDelete };
+    await Note.deleteOne({ id: req.params.postId });
+    const response = { message: "Note deleted with id: " + `${req.body.id}` };
     res.json(response);
+
 });
+
 
 module.exports = router;
