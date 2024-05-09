@@ -14,7 +14,7 @@ class NoteModel {
     userId = json['userId'];
     title = json['title'];
     content = json['content'];
-    date = DateTime.tryParse(json['date']) as String?;
+    date = DateTime.tryParse(json['date']).toString();
   }
 
   Map<String, dynamic> toJson() {
