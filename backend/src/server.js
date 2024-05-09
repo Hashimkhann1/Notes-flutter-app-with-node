@@ -9,7 +9,7 @@ const app = express();
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
-mongoose.connect('mongodb+srv://hashimkhan199999:lKDobGOj2lkJ2kEz@cluster0.hq9jmt5.mongodb.net/notesdb').then(function()  {
+mongoose.connect('mongodb+srv://hashimkhan199999:<Password>@cluster0.hq9jmt5.mongodb.net/notesdb').then(function()  {
     /// home route (/)
     app.get('/' , function(req , res){
         res.send("This is home page");
@@ -20,7 +20,7 @@ mongoose.connect('mongodb+srv://hashimkhan199999:lKDobGOj2lkJ2kEz@cluster0.hq9jm
 
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = 5000;
 
 /// Starting the server on port 5000
 app.listen(PORT, function() {
